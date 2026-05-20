@@ -1,13 +1,13 @@
-export let platform = {
-    x: 250,
-    y: 230,
-    w: 80,
-    h: 20,
+export default class Platform {
+  constructor(x, y, w, h) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+  }
 
-    draw() {
-        push();
-        fill("blue");
-        rect(this.x, this.y, this.w, this.h);
-        pop();
-    },
-};
+  draw() {
+    fill(70, 130, 220);
+    noStroke();
+    rect(this.x, this.y, this.w, this.h, 6);
+  }
