@@ -31,3 +31,14 @@ export default class Character {
     noStroke();
     ellipse(this.x + this.w / 2, this.y + this.h / 2, this.w, this.h);
   }
+
+  // Check collision with a list of platforms
+  collides(platformList) {
+    for (let i = 0; i < platformList.length; i++) {
+      if (platformList[i].landsOn(this)) {
+        return platformList[i];
+      }
+    }
+    return null;
+  }
+}
