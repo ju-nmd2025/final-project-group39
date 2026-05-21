@@ -58,3 +58,26 @@ class BreakablePlatform extends Platform {
     rect(this.x, this.y, this.w, this.h, 6);
   }
 }
+
+// p5.js setup
+function setup() {
+  createCanvas(canvasWidth, canvasHeight);
+  character1 = new Character(185, 450, 30, 30);
+}
+
+function draw() {
+  background(250, 245, 230);
+
+  if (state === "start") {
+    showStartScreen();
+    return;
+  }
+
+  if (state === "play") {
+    runGame();
+    return;
+  }
+
+  // state === "over"
+  showGameOverScreen();
+}
