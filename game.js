@@ -81,3 +81,116 @@ function draw() {
   // state === "over"
   showGameOverScreen();
 }
+
+// Main game loop while playing
+function runGame() {
+  // set horizontal speed from keyboard (arrows or A/D)
+  if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) character1.vx = -5;
+  else if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) character1.vx = 5;
+  else character1.vx = 0;
+
+  // apply gravity and update position (in Character.move)
+  character1.move();
+
+  // check each platform array, jump if landing on one
+  let hitPlatform = character1.collides(platforms);
+  if (hitPlatform) character1.jump();
+
+  let hitMoving = character1.collides(movingPlatforms);
+  if (hitMoving) character1.jump();
+
+  let hitBreakable = character1.collides(breakablePlatforms);
+  if (hitBreakable) {
+    character1.jump();
+    hitBreakable.onLand(); // break the red platform
+  }
+
+  // draw every platform in each array (uses for loops)
+  for (let i = 0; i < platforms.length; i++) {
+    platforms[i].draw();
+  }
+  for (let i = 0; i < movingPlatforms.length; i++) {
+    movingPlatforms[i].draw();
+  }
+  for (let i = 0; i < breakablePlatforms.length; i++) {
+    breakablePlatforms[i].draw();
+  }
+
+  character1.draw();
+
+  // camera scroll, player stays near scrollLine, world moves down
+  if (character1.y < scrollLine) {
+    let diff = scrollLine - character1.y;
+    character1.y = scrollLine;
+    score += floor(diff); // higher climb = more points
+
+    // push all platforms down by the same amount
+    for (let i = 0; i < platforms.length; i++) {
+      platforms[i].y += diff;
+    }
+    for (let i = 0; i < movingPlatforms.length; i++) {
+      movingPlatforms[i].y += diff;
+    }
+    for (let i = 0; i < breakablePlatforms.length; i++) {
+      breakablePlatforms[i].y += diff;
+    }
+  }
+
+  respawnIfOffScreen();
+
+  // show score on screen
+  fill(0);
+  textSize(20);
+  textAlign(LEFT, TOP);
+  text("Score: " + score, 10, 25);
+
+  // fell off bottom of screen
+  if (character1.y > canvasHeight) {
+    state = "over";
+  }
+}
+
+// recycle platforms that scrolled below the screen
+function respawnIfOffScreen() {
+  for (let i = 0; i < platforms.length; i++) {
+    if (platforms[i].y > height + 40) {
+      platforms[i].y = -20; // place above visible area
+      platforms[i].x = random(0, width - platforms[i].w);
+    }
+  }
+
+  for (let i = 0; i < movingPlatforms.length; i++) {
+    if (movingPlatforms[i].y > height + 40) {
+      movingPlatforms[i].y = -20;
+      movingPlatforms[i].x = random(0, width - movingPlatforms[i].w);
+    }
+  }
+
+  for (let i = 0; i < breakablePlatforms.length; i++) {
+    if (breakablePlatforms[i].y > height + 40) {
+      breakablePlatforms[i].y = -20;
+      breakablePlatforms[i].x = random(0, width - breakablePlatforms[i].w);
+      breakablePlatforms[i].broken = false; // can be stepped on again
+    }
+  }
+}
+
+// set up a new game, clear arrays and spawn platforms
+function resetGame() {
+  score = 0;
+  character1 = new Character(185, 450, 30, 30);
+  character1.jump(); // small bounce at start
+
+  platforms = [];
+  movingPlatforms = [];
+  breakablePlatforms = [];
+
+  // starting platform under the player
+  platforms.push(new Platform(165, 500, 70, 12));
+
+  // loop creates 8 normal platforms going upward
+  for (let i = 0; i < 8; i++) {
+    platforms.push(
+      new Platform(random(width - 80), 450 - i * 80, 70, 12)
+    );
+  }
