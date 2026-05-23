@@ -194,3 +194,55 @@ function resetGame() {
       new Platform(random(width - 80), 450 - i * 80, 70, 12)
     );
   }
+
+  // two moving platforms at different heights
+  movingPlatforms.push(
+    new MovingPlatform(random(width - 80), 300, 70, 12, 2)
+  );
+  movingPlatforms.push(
+    new MovingPlatform(random(width - 80), 180, 70, 12, -2)
+  );
+
+  // two breakable platforms
+  breakablePlatforms.push(
+    new BreakablePlatform(random(width - 80), 240, 70, 12)
+  );
+  breakablePlatforms.push(
+    new BreakablePlatform(random(width - 80), 120, 70, 12)
+  );
+}
+
+// title screen before game starts
+function showStartScreen() {
+  fill(0);
+  textAlign(CENTER, CENTER);
+  textSize(32);
+  text("Doodle Jump", width / 2, height / 2 - 40);
+  textSize(16);
+  text("Arrow keys or A/D to move", width / 2, height / 2 + 10);
+  text("Click or SPACE to start", width / 2, height / 2 + 50);
+}
+
+// game over
+function showGameOverScreen() {
+  for (let i = 0; i < platforms.length; i++) platforms[i].draw();
+  for (let i = 0; i < movingPlatforms.length; i++) movingPlatforms[i].draw();
+  for (let i = 0; i < breakablePlatforms.length; i++) breakablePlatforms[i].draw();
+  character1.draw();
+
+  fill(0, 150); // semi-transparent overlay
+  noStroke();
+  rect(0, 0, width, height);
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(30);
+  text("Game Over", width / 2, height / 2 - 30);
+  textSize(18);
+  text("Score: " + score, width / 2, height / 2 + 10);
+  text("Click or SPACE to restart", width / 2, height / 2 + 50);
+}
+
+function startGame() {
+  state = "play";
+  resetGame();
+}
