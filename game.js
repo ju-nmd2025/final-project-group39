@@ -246,3 +246,23 @@ function startGame() {
   state = "play";
   resetGame();
 }
+
+// space or enter to start / restart
+function keyPressed() {
+  if (state !== "play" && (key === " " || keyCode === ENTER)) {
+    startGame();
+  }
+}
+
+// click anywhere to start / restart
+function mousePressed() {
+  if (state !== "play") {
+    startGame();
+  }
+}
+
+// ES modules hide functions from global scope — p5 looks for these on window
+window.setup = setup;
+window.draw = draw;
+window.keyPressed = keyPressed;
+window.mousePressed = mousePressed;
