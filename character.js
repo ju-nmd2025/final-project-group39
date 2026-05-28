@@ -4,10 +4,11 @@ export default class Character {
     this.y = y;
     this.w = w;
     this.h = h;
-    this.vx = 0;
-    this.vy = 0;
+    this.vx = 0; // horizontal speed
+    this.vy = 0; // vertical speed
   }
 
+  // reset player position and velocity for a new game
   reset(x, y) {
     this.x = x;
     this.y = y;
@@ -15,17 +16,20 @@ export default class Character {
     this.vy = 0;
   }
 
+  // apply gravity, move player, and keep inside left/right bounds
   move() {
     this.vy += 0.4;
-    this.x += this.vx;
-    this.y += this.vy;
-    this.x = constrain(this.x, 0, width - this.w);
+    this.x += this.vx; // horizontal movement
+    this.y += this.vy; // vertical movement
+    this.x = constrain(this.x, 0, width - this.w);  // clamp to canvas width
   }
 
+  // jump by giving an upward velocity
   jump() {
     this.vy = -12;
   }
 
+  // draw the player as a green circle
   draw() {
     fill(100, 200, 80);
     noStroke();
@@ -39,6 +43,7 @@ export default class Character {
         return platformList[i];
       }
     }
+    // no collision this frame
     return null;
   }
 }
