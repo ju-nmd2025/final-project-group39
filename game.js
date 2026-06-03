@@ -4,7 +4,7 @@ import Platform from "./platform.js";
 let canvasWidth = 400;
 let canvasHeight = 600;
 
-let scrollLine = 200;  // y line — scroll when player goes above it
+let scrollLine = 200;  // y line, scroll when player goes above it
 let character1;  // player object
 let platforms = [];  // normal blue platforms
 let movingPlatforms = [];  // green, move left/right
@@ -35,7 +35,7 @@ class MovingPlatform extends Platform {
   }
 }
 
-// red platform — one use only
+// red platform, one use only
 class BreakablePlatform extends Platform {
   constructor(x, y, w, h) {
     super(x, y, w, h);
